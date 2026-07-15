@@ -44,17 +44,22 @@
     { title: "Growth & Reporting", text: "We track performance, refine the strategy, and report results with full transparency." },
   ];
 
-  // TODO — replace with real client channel names, niches, subscriber counts and URLs.
-  const PORTFOLIO = [
-    { name: "Nova Tech Reviews", niche: "Tech & Gadgets", subs: "1.2M", grad: "linear-gradient(150deg,#0d3b2c,#062a20)", url: "#" },
-    { name: "Pulse Fitness", niche: "Health & Fitness", subs: "850K", grad: "linear-gradient(150deg,#123f2e,#07160f)", url: "#" },
-    { name: "Wander & Co.", niche: "Travel Vlogging", subs: "640K", grad: "linear-gradient(150deg,#0f3327,#081d16)", url: "#" },
-    { name: "ByteSize Gaming", niche: "Gaming Shorts", subs: "2.4M", grad: "linear-gradient(150deg,#0a4534,#051f18)", url: "#" },
-    { name: "Glow Beauty Lab", niche: "Beauty & Lifestyle", subs: "430K", grad: "linear-gradient(150deg,#123829,#071c15)", url: "#" },
-    { name: "The Finance Edge", niche: "Finance & Business", subs: "310K", grad: "linear-gradient(150deg,#0d3d2e,#062119)", url: "#" },
-    { name: "Studio Eats", niche: "Food & Cooking", subs: "980K", grad: "linear-gradient(150deg,#114030,#081f18)", url: "#" },
-    { name: "Momentum Music", niche: "Music & Entertainment", subs: "1.7M", grad: "linear-gradient(150deg,#0c3a2c,#051e17)", url: "#" },
+  // Real client work. Add more entries any time — just push a { id, url } pair.
+  const LONGFORM = [
+    { id: "w4MrZ1vIF4c", url: "https://youtu.be/w4MrZ1vIF4c" },
+    { id: "mQbWafqdyvU", url: "https://youtu.be/mQbWafqdyvU" },
+    { id: "Nd-KvHnr54s", url: "https://youtu.be/Nd-KvHnr54s" },
+    { id: "P-zx4RL0GR0", url: "https://youtu.be/P-zx4RL0GR0" },
   ];
+
+  const SHORTS = [
+    { id: "YhofV6lC7dQ", url: "https://youtube.com/shorts/YhofV6lC7dQ" },
+    { id: "2zFn5IEnwVA", url: "https://youtube.com/shorts/2zFn5IEnwVA" },
+    { id: "z0lFWmabSg0", url: "https://youtube.com/shorts/z0lFWmabSg0" },
+    { id: "iLqDhUchUdg", url: "https://youtube.com/shorts/iLqDhUchUdg" },
+  ];
+
+  const thumb = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
   const PLATFORMS = ["youtube", "instagram", "tiktok", "twitch", "linkedin"];
   const PLATFORM_LABELS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", twitch: "Twitch", linkedin: "LinkedIn" };
@@ -94,20 +99,90 @@
   }
 
   function renderPortfolio() {
-    const grid = document.getElementById("portfolioGrid");
-    grid.innerHTML = PORTFOLIO.map((p, i) => `
-      <a class="portfolio-card reveal" data-reveal data-reveal-delay="${(i % 4) + 1}" href="${p.url}" target="_blank" rel="noopener">
-        <div class="portfolio-thumb" style="--thumb-grad:${p.grad}; background:${p.grad};"></div>
-        <span class="portfolio-tag">Case Study 0${i + 1}</span>
+    const longformGrid = document.getElementById("portfolioGridLongform");
+    const shortsGrid = document.getElementById("portfolioGridShorts");
+
+    longformGrid.innerHTML = LONGFORM.map((v, i) => `
+      <a class="portfolio-card is-long reveal" data-reveal data-reveal-delay="${(i % 4) + 1}" href="${v.url}" target="_blank" rel="noopener" data-video-id="${v.id}" data-video-type="long">
+        <div class="portfolio-thumb" style="background-image:url('${thumb(v.id)}');"></div>
+        <span class="portfolio-tag">Long-Form 0${i + 1}</span>
         <span class="portfolio-play">${svg("play", 16)}</span>
-        <div class="portfolio-body">
-          <h3>${p.name}</h3>
-          <div class="portfolio-meta">
-            <span>${p.niche}</span><span class="dot"></span><span class="subs">${p.subs} Subs</span>
-          </div>
-        </div>
       </a>
     `).join("");
+
+    shortsGrid.innerHTML = SHORTS.map((v, i) => `
+      <a class="portfolio-card is-short reveal" data-reveal data-reveal-delay="${(i % 4) + 1}" href="${v.url}" target="_blank" rel="noopener" data-video-id="${v.id}" data-video-type="short">
+        <div class="portfolio-thumb" style="background-image:url('${thumb(v.id)}');"></div>
+        <span class="portfolio-tag">Short 0${i + 1}</span>
+        <span class="portfolio-play">${svg("play", 16)}</span>
+      </a>
+    `).join("");
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Video lightbox — plays the video embedded on-page instead of       */
+  /* navigating to YouTube.                                              */
+  /* ------------------------------------------------------------------ */
+
+  function initVideoModal() {
+    const modal = document.getElementById("videoModal");
+    const frame = document.getElementById("videoModalFrame");
+    const backdrop = document.getElementById("videoModalBackdrop");
+    const closeBtn = document.getElementById("videoModalClose");
+    const inner = modal.querySelector(".video-modal-inner");
+
+    function open(id, type) {
+      inner.classList.toggle("is-short", type === "short");
+      frame.innerHTML = `<iframe
+        src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0"
+        title="Taris Agency portfolio video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>`;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function close() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      frame.innerHTML = ""; // stop playback
+      document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll(".portfolio-card").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        open(card.dataset.videoId, card.dataset.videoType);
+      });
+    });
+
+    backdrop.addEventListener("click", close);
+    closeBtn.addEventListener("click", close);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    });
+  }
+
+  function initPortfolioTabs() {
+    const tabs = document.querySelectorAll(".portfolio-tab");
+    const grids = {
+      longform: document.getElementById("portfolioGridLongform"),
+      shorts: document.getElementById("portfolioGridShorts"),
+    };
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => { t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+        tab.classList.add("is-active");
+        tab.setAttribute("aria-selected", "true");
+        Object.entries(grids).forEach(([key, grid]) => {
+          grid.hidden = key !== tab.dataset.tab;
+        });
+        grids[tab.dataset.tab].querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("in-view"));
+      });
+    });
   }
 
   function renderMarquee() {
@@ -339,5 +414,7 @@
     initCursor();
     initTilt();
     initForm();
+    initPortfolioTabs();
+    initVideoModal();
   });
 })();

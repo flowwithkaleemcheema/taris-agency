@@ -236,11 +236,17 @@
           Work That <span class="text-gradient">Speaks For Itself</span>
         </h2>
         <p class="section-text center reveal" data-reveal data-reveal-delay="2">
-          A glimpse into the type of channels and content we manage across niches.
+          A glimpse into the type of content we produce and manage for our clients.
         </p>
       </div>
 
-      <div class="portfolio-grid" id="portfolioGrid"></div>
+      <div class="portfolio-tabs reveal" data-reveal data-reveal-delay="3" role="tablist">
+        <button class="portfolio-tab is-active" data-tab="longform" role="tab" aria-selected="true">Long-Form Content</button>
+        <button class="portfolio-tab" data-tab="shorts" role="tab" aria-selected="false">Shorts</button>
+      </div>
+
+      <div class="portfolio-grid grid-longform" id="portfolioGridLongform"></div>
+      <div class="portfolio-grid grid-shorts" id="portfolioGridShorts" hidden></div>
     </div>
   </section>
 
@@ -374,6 +380,17 @@
     <p>Crafted for creators who play the long game.</p>
   </div>
 </footer>
+
+<!-- Video lightbox -->
+<div class="video-modal" id="videoModal" aria-hidden="true">
+  <div class="video-modal-backdrop" id="videoModalBackdrop"></div>
+  <div class="video-modal-inner">
+    <button class="video-modal-close" id="videoModalClose" aria-label="Close video">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="video-modal-frame" id="videoModalFrame"></div>
+  </div>
+</div>
 
 <script src="js/script.js"></script>
 </body>
