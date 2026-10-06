@@ -2,7 +2,7 @@
   "use strict";
 
   /* ------------------------------------------------------------------ */
-  /* Content data — services, process, portfolio, socials               */
+  /* Content data — services, process, portfolio                        */
   /* Swap the PORTFOLIO array with real client channels when ready.     */
   /* ------------------------------------------------------------------ */
 
@@ -46,12 +46,12 @@
 
   // Real client work. Add more entries any time — just push a { id, url } pair.
   const LONGFORM = [
+    { id: "zrNOVu-1H9w", url: "https://youtu.be/zrNOVu-1H9w" },
     { id: "w4MrZ1vIF4c", url: "https://youtu.be/w4MrZ1vIF4c" },
     { id: "mQbWafqdyvU", url: "https://youtu.be/mQbWafqdyvU" },
     { id: "Nd-KvHnr54s", url: "https://youtu.be/Nd-KvHnr54s" },
     { id: "P-zx4RL0GR0", url: "https://youtu.be/P-zx4RL0GR0" },
     { id: "LCwJ7M462Rs", url: "https://youtu.be/LCwJ7M462Rs" },
-    { id: "zrNOVu-1H9w", url: "https://youtu.be/zrNOVu-1H9w" },
   ];
 
   const SHORTS = [
@@ -65,12 +65,6 @@
 
   const PLATFORMS = ["youtube", "instagram", "tiktok", "twitch", "linkedin"];
   const PLATFORM_LABELS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", twitch: "Twitch", linkedin: "LinkedIn" };
-  const SOCIAL_LINKS = [
-    { key: "youtube", url: "#" },
-    { key: "instagram", url: "#" },
-    { key: "tiktok", url: "#" },
-    { key: "linkedin", url: "#" },
-  ];
 
   /* ------------------------------------------------------------------ */
   /* Render                                                              */
@@ -193,14 +187,6 @@
       (p) => `<div class="marquee-item">${svg(p, 22)}<span>${PLATFORM_LABELS[p]}</span></div>`
     ).join("");
     track.innerHTML = items + items; // duplicate for seamless loop
-  }
-
-  function renderSocials() {
-    const markup = SOCIAL_LINKS.map(
-      (s) => `<a class="social-link" href="${s.url}" target="_blank" rel="noopener" aria-label="${PLATFORM_LABELS[s.key]}">${svg(s.key, 18)}</a>`
-    ).join("");
-    document.getElementById("socialRow").innerHTML = markup;
-    document.getElementById("footerSocialRow").innerHTML = markup;
   }
 
   /* ------------------------------------------------------------------ */
@@ -424,7 +410,6 @@
     renderProcess();
     renderPortfolio();
     renderMarquee();
-    renderSocials();
     initYear();
 
     initPreloader();

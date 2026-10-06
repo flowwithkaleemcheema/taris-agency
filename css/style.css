@@ -903,25 +903,6 @@ main, .navbar, .footer { position: relative; z-index: 1; }
 .contact-item span { display: block; font-size: 0.78rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
 .contact-item p { font-size: 1rem; }
 
-.social-row { display: flex; gap: 12px; }
-.social-link {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: all 0.35s var(--ease);
-}
-.social-link:hover {
-  color: #05130c;
-  background: var(--green-bright);
-  border-color: var(--green-bright);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px -8px rgba(23,232,143,0.6);
-}
-
 .contact-form {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -979,7 +960,6 @@ main, .navbar, .footer { position: relative; z-index: 1; }
 .form-success.is-visible { opacity: 1; height: auto; margin-top: 16px; }
 .form-error { color: #ff6b6b; }
 .form-error a { text-decoration: underline; }
-.form-honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .contact-item p a { transition: color 0.3s; }
 .contact-item p a:hover { color: var(--green-bright); }
 
