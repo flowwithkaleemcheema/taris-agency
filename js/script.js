@@ -50,6 +50,8 @@
     { id: "mQbWafqdyvU", url: "https://youtu.be/mQbWafqdyvU" },
     { id: "Nd-KvHnr54s", url: "https://youtu.be/Nd-KvHnr54s" },
     { id: "P-zx4RL0GR0", url: "https://youtu.be/P-zx4RL0GR0" },
+    { id: "LCwJ7M462Rs", url: "https://youtu.be/LCwJ7M462Rs" },
+    { id: "zrNOVu-1H9w", url: "https://youtu.be/zrNOVu-1H9w" },
   ];
 
   const SHORTS = [
@@ -361,29 +363,47 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Contact form (front-end only)                                       */
-  /* Wire this up to a form backend (Formspree, etc.) before going live. */
+  /* Contact form — submissions are emailed via FormSubmit.co to the     */
+  /* address in the form's action attribute.                             */
   /* ------------------------------------------------------------------ */
 
   function initForm() {
     const form = document.getElementById("contactForm");
     const submitBtn = form.querySelector(".form-submit");
     const success = document.getElementById("formSuccess");
+    const error = document.getElementById("formError");
+    const endpoint = form.action.replace("formsubmit.co/", "formsubmit.co/ajax/");
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
       submitBtn.classList.add("is-loading");
+      submitBtn.disabled = true;
       success.classList.remove("is-visible");
+      error.classList.remove("is-visible");
 
-      setTimeout(() => {
-        submitBtn.classList.remove("is-loading");
+      const data = new FormData(form);
+      data.set("_replyto", data.get("email"));
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: data,
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || String(json.success) === "false") throw new Error(json.message || res.statusText);
         success.classList.add("is-visible");
         form.reset();
-      }, 1200);
+      } catch (err) {
+        error.classList.add("is-visible");
+      } finally {
+        submitBtn.classList.remove("is-loading");
+        submitBtn.disabled = false;
+      }
     });
   }
 
