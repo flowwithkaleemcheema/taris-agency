@@ -977,6 +977,11 @@ main, .navbar, .footer { position: relative; z-index: 1; }
   transition: opacity 0.4s, height 0.4s;
 }
 .form-success.is-visible { opacity: 1; height: auto; margin-top: 16px; }
+.form-error { color: #ff6b6b; }
+.form-error a { text-decoration: underline; }
+.form-honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.contact-item p a { transition: color 0.3s; }
+.contact-item p a:hover { color: var(--green-bright); }
 
 /* ==========================================================================
    Footer
